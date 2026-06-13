@@ -204,6 +204,139 @@ body {
 
 .skill__slow { font-size: 0.7rem; font-weight: 600; color: var(--muted); }
 
+/* ---------- writing practice ---------- */
+
+.write-toggle {
+  width: 100%;
+  max-width: 520px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 16px;
+  padding: 14px;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--cream);
+  background: var(--espresso-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.15s, transform 0.1s;
+}
+.write-toggle:hover { background: #3a271c; }
+.write-toggle:active { transform: scale(0.98); }
+.write-toggle .ico { font-size: 1.2rem; }
+.write-toggle.is-on { background: var(--cardamom); color: var(--ink); }
+
+.write-panel {
+  width: 100%;
+  max-width: 520px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* `display` here would otherwise beat the `hidden` attribute. */
+.write-panel[hidden],
+.compare[hidden] { display: none; }
+
+.write-stage {
+  background: linear-gradient(165deg, var(--cream), var(--tan));
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b4a33;
+  font-weight: 600;
+}
+
+.write-trace {
+  width: 100%;
+  height: auto;
+  max-height: 38vh;
+  display: block;
+  overflow: visible;
+}
+.write-trace .ghost { fill: rgba(42, 28, 20, 0.13); stroke: none; }
+.write-trace .ink {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.write-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.write-speed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.write-speed input[type="range"] {
+  flex: 1;
+  accent-color: var(--saffron);
+  cursor: pointer;
+}
+
+.write-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.write-hint { font-size: 0.85rem; color: var(--muted); }
+
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.compare__cell {
+  margin: 0;
+  background: var(--espresso-2);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+}
+.compare__cell figcaption {
+  margin-top: 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.compare__model {
+  font-family: var(--deva);
+  font-size: clamp(1.8rem, 9vw, 2.6rem);
+  color: var(--cream);
+  line-height: 1.3;
+  min-height: 1.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.compare__cell img {
+  width: 100%;
+  height: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+@media (max-width: 420px) {
+  .compare { grid-template-columns: 1fr; }
+}
+
 /* ---------- feedback ---------- */
 
 .feedback {

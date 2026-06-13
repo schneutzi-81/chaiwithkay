@@ -1,8 +1,9 @@
 # Chai with Kay ☕
 
-A personal Hindi-learning PWA. Every phrase exercises three skills on one card:
+A personal Hindi-learning PWA. Every phrase exercises four skills on one card:
 **read** it (Devanagari + optional transliteration), **hear** it (text-to-speech),
-and **say** it (the mic checks you). Sessions are short — a cup of chai, not a textbook.
+**say** it (the mic checks you), and **write** it (the script draws slowly so you
+can copy it onto paper). Sessions are short — a cup of chai, not a textbook.
 
 No backend, no accounts, no cost. Everything runs in the browser.
 
@@ -60,10 +61,24 @@ That's the whole content model.
 |---|---|---|---|
 | Listen (TTS) | ✅ | ✅ | ✅ |
 | Speak — recognition | ✅ | ✅ | ⚠️ falls back |
+| Write — trace + photo compare | ✅ | ✅ | ✅ |
 
 Where speech **recognition** isn't available (notably iOS), Speak switches to a
 record-and-play-back mode: you record your attempt and compare it to the model
 voice. Listening always works.
+
+## Write it
+
+Tap **✍️ Write it** and the current phrase's Devanagari is traced slowly, stroke by
+stroke, so you can copy the letterforms onto paper. A 🐢→🐇 slider sets the pace
+(it remembers your choice) and **↻ Replay** redraws. Then snap or upload a photo of
+your handwriting to see it **side-by-side** with the model script and judge it
+yourself — there's no automatic grading, and nothing is uploaded or stored.
+
+The trace is real: the phrase is shaped with **HarfBuzz** (wasm) so Devanagari
+conjuncts and matra reordering come out correct, and the shaped glyph outlines are
+animated as an SVG stroke. HarfBuzz and a bundled **Noto Sans Devanagari** font load
+lazily the first time you open the panel, and both are precached for offline use.
 
 ## Layout
 
@@ -72,8 +87,10 @@ src/
   main.js          boot + PWA registration
   ui.js            render the card, wire interactions
   speech.js        TTS + recognition + record fallback
+  writing.js       HarfBuzz shaping → SVG stroke trace (the "write it" skill)
   storage.js       streak / learned / settings (localStorage)
   styles.css       the warm evening-chai theme
+  assets/fonts/    bundled Noto Sans Devanagari (offline + shaper input)
   data/phrases.json
 ```
 

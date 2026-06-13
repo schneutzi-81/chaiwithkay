@@ -18,6 +18,13 @@ import {
   touchStreak,
   getStreak,
 } from "./storage.js";
+import {
+  ensureShaper,
+  isShaperReady,
+  drawPhrase,
+  replay,
+  setSpeed,
+} from "./writing.js";
 
 let deck = []; // active list of phrases (after filtering)
 let all = []; // every phrase
@@ -25,6 +32,8 @@ let idx = 0; // current card index
 let revealed = false; // is the English meaning shown?
 let curLevel = "All"; // active CEFR level filter
 let curCat = "All"; // active category filter
+let writeOpen = false; // is the writing panel expanded?
+let photoUrl = null; // object URL of the user's handwriting photo
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -69,6 +78,13 @@ function render() {
   $("#known").classList.toggle("is-on", isKnown(p.id));
   $("#position").textContent = `${idx + 1} / ${deck.length}`;
   setFeedback("");
+
+  // Keep the writing guide in sync with the current card.
+  if (writeOpen && isShaperReady()) {
+    drawPhrase($("#write-stage"), p.hi);
+    $("#compare-model").textContent = p.hi;
+    clearPhoto(); // the photo was for the previous card
+  }
 }
 
 function renderStreak() {
@@ -151,6 +167,58 @@ async function runRecordFallback() {
   }
 }
 
+/* ---------- writing ---------- */
+
+async function toggleWriting() {
+  writeOpen = !writeOpen;
+  $("#write-panel").hidden = !writeOpen;
+  $("#write-toggle").setAttribute("aria-expanded", String(writeOpen));
+  $("#write-toggle").classList.toggle("is-on", writeOpen);
+  if (!writeOpen) return;
+
+  touchStreak();
+  renderStreak();
+
+  const stage = $("#write-stage");
+  if (isShaperReady()) {
+    drawPhrase(stage, current().hi);
+    $("#compare-model").textContent = current().hi;
+    return;
+  }
+
+  stage.textContent = "Preparing the strokes…";
+  try {
+    await ensureShaper();
+    if (!writeOpen) return; // closed again while loading
+    drawPhrase(stage, current().hi);
+    $("#compare-model").textContent = current().hi;
+  } catch {
+    stage.textContent = "Couldn't load the writing guide in this browser.";
+  }
+}
+
+function onPhoto(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  if (photoUrl) URL.revokeObjectURL(photoUrl);
+  photoUrl = URL.createObjectURL(file);
+  $("#compare-photo").src = photoUrl;
+  $("#compare-model").textContent = current().hi;
+  $("#write-compare-view").hidden = false;
+  $("#write-retake").hidden = false;
+}
+
+function clearPhoto() {
+  if (photoUrl) {
+    URL.revokeObjectURL(photoUrl);
+    photoUrl = null;
+  }
+  $("#compare-photo").removeAttribute("src");
+  $("#write-compare-view").hidden = true;
+  $("#write-retake").hidden = true;
+  $("#write-photo").value = "";
+}
+
 /* ---------- navigation ---------- */
 
 function go(delta) {
@@ -226,6 +294,27 @@ function wireGlobalControls() {
     setSetting("showTranslit", e.target.checked);
     $(".card__translit").dataset.on = e.target.checked;
   });
+
+  // writing practice
+  $("#write-toggle").addEventListener("click", toggleWriting);
+  $("#write-replay").addEventListener("click", replay);
+
+  // Slider reads left→right as slow→fast (🐢→🐇), but the engine wants
+  // ms-per-unit where *higher* is slower — so invert across the 0.4..4 range.
+  const paceToMs = (pace) => 4.4 - pace;
+  const speed = $("#write-speed");
+  speed.value = getSettings().writeSpeed ?? 2.8;
+  setSpeed(paceToMs(Number(speed.value)));
+  speed.addEventListener("input", (e) => {
+    const pace = Number(e.target.value);
+    setSetting("writeSpeed", pace);
+    setSpeed(paceToMs(pace));
+  });
+
+  const photo = $("#write-photo");
+  $("#write-photo-btn").addEventListener("click", () => photo.click());
+  photo.addEventListener("change", onPhoto);
+  $("#write-retake").addEventListener("click", clearPhoto);
 
   // keyboard: ← → to move, space to listen
   document.addEventListener("keydown", (e) => {

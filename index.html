@@ -39,6 +39,41 @@
       </button>
     </div>
 
+    <button class="write-toggle" id="write-toggle" aria-expanded="false" aria-controls="write-panel">
+      <span class="ico">✍️</span> Write it
+    </button>
+
+    <section class="write-panel" id="write-panel" hidden>
+      <div class="write-stage" id="write-stage" aria-live="polite"></div>
+
+      <div class="write-tools">
+        <button class="pill" id="write-replay">↻ Replay</button>
+        <label class="write-speed">
+          <span aria-hidden="true">🐢</span>
+          <input type="range" id="write-speed" min="0.4" max="4" step="0.1"
+                 aria-label="Writing speed (left slower, right faster)" />
+          <span aria-hidden="true">🐇</span>
+        </label>
+      </div>
+
+      <div class="write-compare">
+        <p class="write-hint">Copy it on paper, then add a photo to compare.</p>
+        <input type="file" id="write-photo" accept="image/*" capture="environment" hidden />
+        <button class="pill" id="write-photo-btn">📷 Add a photo</button>
+        <button class="pill" id="write-retake" hidden>↺ Retake</button>
+        <div class="compare" id="write-compare-view" hidden>
+          <figure class="compare__cell">
+            <div class="compare__model" id="compare-model" lang="hi"></div>
+            <figcaption>Model</figcaption>
+          </figure>
+          <figure class="compare__cell">
+            <img id="compare-photo" alt="Photo of your handwriting" />
+            <figcaption>Yours</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <p class="feedback" id="feedback" aria-live="polite"></p>
 
     <nav class="controls">

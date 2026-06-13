@@ -2,10 +2,11 @@
 
 ## Goal
 A personal PWA for learning Hindi as a beginner, focused on **speaking, reading,
-and listening**. Daily, low-friction practice — short sessions, no setup ceremony.
+listening, and writing**. Daily, low-friction practice — short sessions, no setup
+ceremony.
 
 ## Principles
-- One card = all three skills. No mode-switching to practise reading vs listening.
+- One card = all four skills. No mode-switching to practise reading vs listening.
 - Browser-native speech (free, offline-friendly). No paid APIs, no backend.
 - Content is plain JSON — growing the deck never means touching app code.
 
@@ -15,6 +16,8 @@ and listening**. Daily, low-friction practice — short sessions, no setup cerem
 | Vite + vanilla JS | Fast, no framework tax; easy to extend with Preact later. |
 | vite-plugin-pwa | Manifest + service worker + offline without hand-rolling. |
 | Web Speech API | TTS + recognition built into the browser, zero cost. |
+| HarfBuzz (wasm) + bundled font | Correct Devanagari shaping for the write-trace; no backend, works offline. |
+| Skip handwriting OCR | Self-judged side-by-side photo compare, mirroring the record-and-compare speak fallback. No model/grading to host. |
 | GitHub Pages | Free HTTPS (needed for mic) + lives with the repo. |
 | localStorage | Streak/progress without a database. |
 
@@ -27,6 +30,15 @@ and listening**. Daily, low-friction practice — short sessions, no setup cerem
 - [x] Streak + "got it" marking
 - [x] Installable PWA, offline-capable
 - [x] Keyboard nav, reduced-motion, visible focus
+
+## Scope — Write skill (added)
+- [x] Trace-to-copy: phrase's Devanagari draws slowly (HarfBuzz-shaped glyph
+      outlines as an animated SVG stroke), adjustable speed, replay
+- [x] Speed slider persisted; redraws on prev/next/shuffle/filter
+- [x] Photo compare: snap/upload handwriting side-by-side with the model script
+      (self-judged, no OCR); nothing persisted
+- [x] HarfBuzz wasm + bundled Noto Sans Devanagari lazy-loaded and precached for offline
+- [x] Honors reduced-motion (draws complete instantly)
 
 ## Content — A1–A2 syllabus
 The deck follows a CEFR-style **A1–A2** progression. Each phrase carries a `level`
