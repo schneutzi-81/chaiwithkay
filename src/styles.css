@@ -164,6 +164,21 @@ body {
 
 .card__en { margin-top: 14px; font-size: 1.05rem; font-weight: 600; color: #4a3322; }
 
+.card__grammar {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(138, 160, 74, 0.18);
+  border: 1px solid rgba(138, 160, 74, 0.5);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #3c4a1c;
+  transition: opacity 0.2s;
+}
+.card__grammar[data-on="false"] { opacity: 0; pointer-events: none; }
+
 /* ---------- skill buttons ---------- */
 
 .skills {
@@ -264,11 +279,9 @@ body {
 }
 .write-trace .ghost { fill: rgba(42, 28, 20, 0.13); stroke: none; }
 .write-trace .ink {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 14;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  /* each stroke is a filled variable-width ribbon, revealed by an SVG mask */
+  fill: var(--ink);
+  stroke: none;
 }
 
 .write-tools {
@@ -393,6 +406,73 @@ body {
 }
 #known.is-on { background: var(--cardamom); color: var(--ink); }
 
+/* ---------- quick-filter chips ---------- */
+
+.quick-filters {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.qf {
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--cream);
+  background: var(--espresso-2);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.qf:hover { background: #3a271c; }
+.qf:active { transform: scale(0.96); }
+.qf.is-on { background: var(--saffron); color: var(--ink); }
+.qf--today { background: var(--clove); }
+.qf--today:hover { background: #a83e22; }
+.qf--today.is-on { background: var(--clove); color: var(--cream); }
+
+/* ---------- session completion ---------- */
+
+.session-done {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(165deg, var(--tan), var(--tan-deep));
+  color: var(--ink);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 32px 28px;
+  text-align: center;
+  margin-top: 18px;
+}
+.session-done__title {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.session-done__sub {
+  font-size: 0.95rem;
+  color: #6b4a33;
+  margin-bottom: 20px;
+}
+.session-done__exit {
+  border: none;
+  background: var(--espresso-2);
+  color: var(--cream);
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 /* ---------- settings row ---------- */
 
 .settings {
@@ -400,6 +480,8 @@ body {
   max-width: 520px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
   justify-content: space-between;
   margin-top: 22px;
   font-size: 0.85rem;

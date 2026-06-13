@@ -84,9 +84,20 @@
       <button class="nav" id="next" aria-label="Next">›</button>
     </nav>
 
+    <div class="quick-filters" role="group" aria-label="Quick filters">
+      <button class="qf qf--today" id="session-start">☕ Today's 10</button>
+      <button class="qf" data-level="A1" data-cat="All">⭐ Essentials</button>
+      <button class="qf" data-level="A1" data-cat="Questions">❓ Questions</button>
+      <button class="qf" data-level="A1" data-cat="Numbers">1·2·3 Numbers</button>
+      <button class="qf" data-level="A1" data-cat="Greetings">👋 Greetings</button>
+    </div>
+
     <div class="settings">
       <label>
         <input type="checkbox" id="toggle-translit" /> Show transliteration
+      </label>
+      <label>
+        <input type="checkbox" id="toggle-grammar" /> Show grammar
       </label>
       <select id="level-filter" aria-label="Filter by level"></select>
       <select id="filter" aria-label="Filter by category"></select>

@@ -17,6 +17,8 @@ import {
   knownCount,
   touchStreak,
   getStreak,
+  getTodaySession,
+  saveTodaySession,
 } from "./storage.js";
 import {
   ensureShaper,
@@ -34,6 +36,8 @@ let curLevel = "All"; // active CEFR level filter
 let curCat = "All"; // active category filter
 let writeOpen = false; // is the writing panel expanded?
 let photoUrl = null; // object URL of the user's handwriting photo
+let sessionMode = false; // are we in today's focused session?
+let sessionDone = false; // did the current session finish?
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -58,12 +62,13 @@ function render() {
   if (!p) return;
   revealed = false;
 
-  const showT = getSettings().showTranslit;
+  const { showTranslit: showT, showGrammar: showG = false } = getSettings();
 
   $("#card").innerHTML = `
-    <div class="card__cat">${p.cat}</div>
+    <div class="card__cat">${p.cat}${sessionMode ? ` · ${idx + 1}/${deck.length}` : ""}</div>
     <div class="card__hi" lang="hi">${p.hi}</div>
     <div class="card__translit" data-on="${showT}">${p.translit}</div>
+    ${p.grammar ? `<div class="card__grammar" data-on="${showG}">${p.grammar}</div>` : ""}
     <button class="card__reveal" id="reveal">Tap to reveal meaning</button>
     <div class="card__en" hidden>${p.en}</div>
   `;
@@ -222,8 +227,66 @@ function clearPhoto() {
 /* ---------- navigation ---------- */
 
 function go(delta) {
+  if (sessionMode && delta > 0 && idx === deck.length - 1) {
+    endSession();
+    return;
+  }
   idx = (idx + delta + deck.length) % deck.length;
   render();
+}
+
+function startSession() {
+  // Pick up to 10 cards: unknown first, then supplement with known ones.
+  let ids = getTodaySession();
+  if (!ids) {
+    const unknown = all.filter((p) => !isKnown(p.id));
+    const known = all.filter((p) => isKnown(p.id));
+    const pick = (arr, n) => [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+    const chosen = pick(unknown, 10);
+    if (chosen.length < 10) chosen.push(...pick(known, 10 - chosen.length));
+    ids = chosen.map((p) => p.id);
+    saveTodaySession(ids);
+  }
+  const idSet = new Set(ids);
+  deck = ids.map((id) => all.find((p) => p.id === id)).filter(Boolean);
+  sessionMode = true;
+  sessionDone = false;
+  idx = 0;
+  $("#session-done-card")?.remove();
+  updateSessionButton();
+  render();
+  touchStreak();
+  renderStreak();
+}
+
+function endSession() {
+  sessionDone = true;
+  $("#card").innerHTML = `
+    <div class="session-done__title">Session done! ☕</div>
+    <p class="session-done__sub">Great work — 15 minutes well spent.<br>Come back tomorrow to keep your streak.</p>
+    <button class="session-done__exit" id="session-exit">← Back to all cards</button>
+  `;
+  setFeedback("");
+  $("#position").textContent = `${deck.length} / ${deck.length}`;
+  $("#session-exit").addEventListener("click", exitSession);
+}
+
+function exitSession() {
+  sessionMode = false;
+  sessionDone = false;
+  deck = all.filter(
+    (p) =>
+      (curLevel === "All" || p.level === curLevel) &&
+      (curCat === "All" || p.cat === curCat)
+  );
+  idx = 0;
+  updateSessionButton();
+  render();
+}
+
+function updateSessionButton() {
+  $("#session-start").classList.toggle("is-on", sessionMode);
+  $("#session-start").textContent = sessionMode ? "✕ Exit session" : "☕ Today's 10";
 }
 
 function shuffle() {
@@ -295,13 +358,46 @@ function wireGlobalControls() {
     $(".card__translit").dataset.on = e.target.checked;
   });
 
+  const togG = $("#toggle-grammar");
+  togG.checked = getSettings().showGrammar ?? false;
+  togG.addEventListener("change", (e) => {
+    setSetting("showGrammar", e.target.checked);
+    const pill = $(".card__grammar");
+    if (pill) pill.dataset.on = e.target.checked;
+  });
+
+  // quick-filter chips
+  document.querySelectorAll(".qf[data-level]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (sessionMode) exitSession();
+      curLevel = btn.dataset.level;
+      curCat = btn.dataset.cat;
+      // sync the dropdowns
+      $("#level-filter").value = curLevel;
+      buildCategoryFilter();
+      applyFilter();
+      // highlight active chip
+      document.querySelectorAll(".qf[data-level]").forEach((b) =>
+        b.classList.toggle("is-on", b === btn)
+      );
+    });
+  });
+
+  $("#session-start").addEventListener("click", () => {
+    if (sessionMode) exitSession();
+    else startSession();
+    // clear quick-filter chip highlights when entering session
+    document.querySelectorAll(".qf[data-level]").forEach((b) => b.classList.remove("is-on"));
+  });
+
   // writing practice
   $("#write-toggle").addEventListener("click", toggleWriting);
   $("#write-replay").addEventListener("click", replay);
 
   // Slider reads left→right as slow→fast (🐢→🐇), but the engine wants
-  // ms-per-unit where *higher* is slower — so invert across the 0.4..4 range.
-  const paceToMs = (pace) => 4.4 - pace;
+  // ms-per-pixel where *higher* is slower — so invert across the 0.4..4 range.
+  // The ×5 scales it to the skeleton's pixel lengths (default pace ≈ 8 ms/px).
+  const paceToMs = (pace) => (4.4 - pace) * 5;
   const speed = $("#write-speed");
   speed.value = getSettings().writeSpeed ?? 2.8;
   setSpeed(paceToMs(Number(speed.value)));

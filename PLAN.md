@@ -16,7 +16,8 @@ ceremony.
 | Vite + vanilla JS | Fast, no framework tax; easy to extend with Preact later. |
 | vite-plugin-pwa | Manifest + service worker + offline without hand-rolling. |
 | Web Speech API | TTS + recognition built into the browser, zero cost. |
-| HarfBuzz (wasm) + bundled font | Correct Devanagari shaping for the write-trace; no backend, works offline. |
+| HarfBuzz (wasm) + bundled Kalam handwriting font | Correct Devanagari shaping for the write-trace; handwriting letterforms; no backend, works offline. |
+| Centerline pen (rasterize + Zhang–Suen thinning) | No offline pen-stroke dataset exists for arbitrary words; thinning the shaped glyph yields a skeleton the pen can follow, so it looks written rather than outlined. |
 | Skip handwriting OCR | Self-judged side-by-side photo compare, mirroring the record-and-compare speak fallback. No model/grading to host. |
 | GitHub Pages | Free HTTPS (needed for mic) + lives with the repo. |
 | localStorage | Streak/progress without a database. |
@@ -32,8 +33,10 @@ ceremony.
 - [x] Keyboard nav, reduced-motion, visible focus
 
 ## Scope — Write skill (added)
-- [x] Trace-to-copy: phrase's Devanagari draws slowly (HarfBuzz-shaped glyph
-      outlines as an animated SVG stroke), adjustable speed, replay
+- [x] Write-by-hand: a pressured pen draws slowly down the centerline of each stroke
+      (HarfBuzz shaping → rasterize → Zhang–Suen thinning → traced strokes), each a
+      variable-width ribbon (thin→thick→thin) revealed by an animated mask, in a
+      bundled Kalam handwriting font; adjustable speed, replay
 - [x] Speed slider persisted; redraws on prev/next/shuffle/filter
 - [x] Photo compare: snap/upload handwriting side-by-side with the model script
       (self-judged, no OCR); nothing persisted

@@ -6,7 +6,8 @@ const KEY = "chaiwithkay.v1";
 const fallback = {
   known: [], // ids you've marked "got it"
   streak: { count: 0, last: null }, // day streak
-  settings: { showTranslit: true },
+  settings: { showTranslit: true, showGrammar: false },
+  session: { date: null, ids: [] }, // today's practice session
 };
 
 function load() {
@@ -68,4 +69,18 @@ export function touchStreak() {
 
 export function getStreak() {
   return state.streak.count;
+}
+
+// Today's session: up to 10 card ids chosen once per calendar day.
+export function getTodaySession() {
+  const today = new Date().toDateString();
+  if (state.session?.date === today && state.session.ids?.length) {
+    return state.session.ids;
+  }
+  return null;
+}
+
+export function saveTodaySession(ids) {
+  state.session = { date: new Date().toDateString(), ids };
+  save(state);
 }

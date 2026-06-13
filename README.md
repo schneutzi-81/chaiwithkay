@@ -69,16 +69,22 @@ voice. Listening always works.
 
 ## Write it
 
-Tap **✍️ Write it** and the current phrase's Devanagari is traced slowly, stroke by
-stroke, so you can copy the letterforms onto paper. A 🐢→🐇 slider sets the pace
-(it remembers your choice) and **↻ Replay** redraws. Then snap or upload a photo of
-your handwriting to see it **side-by-side** with the model script and judge it
-yourself — there's no automatic grading, and nothing is uploaded or stored.
+Tap **✍️ Write it** and the current phrase is written out by hand: a pressured pen
+travels slowly down the **centerline** of each stroke — pressing **thin→thick→thin**
+like a real nib — in a handwriting face, so you can copy the motion onto paper. A 🐢→🐇 slider sets the pace (it remembers your
+choice) and **↻ Replay** redraws. Then snap or upload a photo of your handwriting to
+see it **side-by-side** with the model script and judge it yourself — there's no
+automatic grading, and nothing is uploaded or stored.
 
-The trace is real: the phrase is shaped with **HarfBuzz** (wasm) so Devanagari
-conjuncts and matra reordering come out correct, and the shaped glyph outlines are
-animated as an SVG stroke. HarfBuzz and a bundled **Noto Sans Devanagari** font load
-lazily the first time you open the panel, and both are precached for offline use.
+How it's built, since there's no offline pen-stroke dataset for arbitrary words:
+the phrase is shaped with **HarfBuzz** (wasm) so Devanagari conjuncts and matra
+reordering come out correct, the shaped glyph is rasterized and **thinned to a 1px
+skeleton** (Zhang–Suen), and that skeleton is traced into ordered strokes — each
+rendered as a **variable-width ribbon** (tapered at the ends, swelling in the middle)
+and revealed by an animated mask so it draws on like a pressured pen. The letterforms
+come from a bundled **Kalam** handwriting font (SIL OFL).
+HarfBuzz and the font load lazily the first time you open the panel, and both are
+precached for offline use.
 
 ## Layout
 
@@ -87,10 +93,10 @@ src/
   main.js          boot + PWA registration
   ui.js            render the card, wire interactions
   speech.js        TTS + recognition + record fallback
-  writing.js       HarfBuzz shaping → SVG stroke trace (the "write it" skill)
+  writing.js       HarfBuzz shaping → centerline pen trace (the "write it" skill)
   storage.js       streak / learned / settings (localStorage)
   styles.css       the warm evening-chai theme
-  assets/fonts/    bundled Noto Sans Devanagari (offline + shaper input)
+  assets/fonts/    bundled Kalam handwriting font (offline + shaper input)
   data/phrases.json
 ```
 
