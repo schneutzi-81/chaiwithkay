@@ -23,12 +23,15 @@ let deck = []; // active list of phrases (after filtering)
 let all = []; // every phrase
 let idx = 0; // current card index
 let revealed = false; // is the English meaning shown?
+let curLevel = "All"; // active CEFR level filter
+let curCat = "All"; // active category filter
 
 const $ = (sel) => document.querySelector(sel);
 
 export function init(phrases) {
   all = phrases;
   deck = [...phrases];
+  buildLevelFilter();
   buildCategoryFilter();
   renderStreak();
   render();
@@ -166,17 +169,41 @@ function shuffle() {
 
 /* ---------- controls ---------- */
 
-function buildCategoryFilter() {
-  const cats = ["All", ...new Set(all.map((p) => p.cat))];
-  $("#filter").innerHTML = cats
-    .map((c) => `<option value="${c}">${c}</option>`)
+function buildLevelFilter() {
+  const levels = ["All", ...new Set(all.map((p) => p.level))];
+  $("#level-filter").innerHTML = levels
+    .map((l) => `<option value="${l}">${l === "All" ? "All levels" : l}</option>`)
     .join("");
-  $("#filter").addEventListener("change", (e) => {
-    const c = e.target.value;
-    deck = c === "All" ? [...all] : all.filter((p) => p.cat === c);
-    idx = 0;
-    render();
+  $("#level-filter").addEventListener("change", (e) => {
+    curLevel = e.target.value;
+    curCat = "All"; // categories are level-specific; reset on level change
+    buildCategoryFilter();
+    applyFilter();
   });
+}
+
+// Category options reflect the active level so you never pick an empty combo.
+function buildCategoryFilter() {
+  const inLevel = curLevel === "All" ? all : all.filter((p) => p.level === curLevel);
+  const cats = ["All", ...new Set(inLevel.map((p) => p.cat))];
+  $("#filter").innerHTML = cats
+    .map((c) => `<option value="${c}">${c === "All" ? "All topics" : c}</option>`)
+    .join("");
+  $("#filter").value = curCat;
+  $("#filter").onchange = (e) => {
+    curCat = e.target.value;
+    applyFilter();
+  };
+}
+
+function applyFilter() {
+  deck = all.filter(
+    (p) =>
+      (curLevel === "All" || p.level === curLevel) &&
+      (curCat === "All" || p.cat === curCat)
+  );
+  idx = 0;
+  render();
 }
 
 function wireGlobalControls() {

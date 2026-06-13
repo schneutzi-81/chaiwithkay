@@ -28,6 +28,18 @@ and listening**. Daily, low-friction practice — short sessions, no setup cerem
 - [x] Installable PWA, offline-capable
 - [x] Keyboard nav, reduced-motion, visible focus
 
+## Content — A1–A2 syllabus
+The deck follows a CEFR-style **A1–A2** progression. Each phrase carries a `level`
+(`A1`/`A2`) alongside its topic `cat`, and the UI filters by both (the topic list
+is scoped to the chosen level). ~140 phrases across 20 units:
+- **A1 (10 units):** Greetings · Introductions · Courtesy · Numbers · Family ·
+  Questions · Days & Time · Food & Drink · Colours · Everyday Actions
+- **A2 (10 units):** Daily Routine · Shopping & Money · Directions & Places ·
+  Travel & Transport · Weather · Health & Body · Restaurant · Past & Future ·
+  Feelings & Opinions · Describing Things
+
+Next content step: deepen each unit toward the full ~1,500-word A1–A2 base.
+
 ## Roadmap
 - **v0.2 — Spaced repetition.** Reviews target weak/unknown phrases instead of
   linear order. Store per-card ease + due date.

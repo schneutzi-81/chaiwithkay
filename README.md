@@ -33,15 +33,26 @@ After that, pushing to `main` ships it to `https://<you>.github.io/chaiwithkay/`
 > If your repo isn't named `chaiwithkay`, update `base`, `start_url`, and `scope`
 > in `vite.config.js` to match.
 
+## Content: an A1–A2 syllabus
+
+The deck is organised as a CEFR **A1–A2** beginner syllabus — ~140 phrases across
+20 topic units (10 A1, 10 A2), from greetings and numbers up to daily routine,
+directions, and shopping. Filter by **level** (A1 / A2) and by **topic**; the topic
+list narrows to whatever's in the selected level.
+
 ## Add your own phrases
 
 Edit `src/data/phrases.json`. Each entry:
 
 ```json
-{ "id": "g1", "hi": "नमस्ते", "translit": "namaste", "en": "Hello", "cat": "Greetings" }
+{ "id": "a1-greet-01", "level": "A1", "cat": "Greetings", "hi": "नमस्ते", "translit": "namaste", "en": "Hello / Goodbye" }
 ```
 
-`cat` automatically appears in the category filter. That's the whole content model.
+- `level` is `"A1"` or `"A2"` — it feeds the level filter.
+- `cat` is the topic unit — it appears in the category filter (scoped to the level).
+- `id` must be unique (progress/streak are keyed on it).
+
+That's the whole content model.
 
 ## Browser support
 
