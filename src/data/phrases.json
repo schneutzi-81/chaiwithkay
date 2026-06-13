@@ -1,0 +1,35 @@
+[
+  { "id": "g1", "hi": "नमस्ते", "translit": "namaste", "en": "Hello (respectful)", "cat": "Greetings" },
+  { "id": "g2", "hi": "नमस्कार", "translit": "namaskār", "en": "Greetings", "cat": "Greetings" },
+  { "id": "g3", "hi": "सुप्रभात", "translit": "suprabhāt", "en": "Good morning", "cat": "Greetings" },
+  { "id": "g4", "hi": "शुभ रात्रि", "translit": "shubh rātri", "en": "Good night", "cat": "Greetings" },
+  { "id": "g5", "hi": "फिर मिलेंगे", "translit": "phir milenge", "en": "See you again", "cat": "Greetings" },
+
+  { "id": "c1", "hi": "धन्यवाद", "translit": "dhanyavād", "en": "Thank you", "cat": "Courtesy" },
+  { "id": "c2", "hi": "शुक्रिया", "translit": "shukriyā", "en": "Thanks", "cat": "Courtesy" },
+  { "id": "c3", "hi": "कृपया", "translit": "kripayā", "en": "Please", "cat": "Courtesy" },
+  { "id": "c4", "hi": "माफ़ कीजिए", "translit": "māf kījiye", "en": "Excuse me / Sorry", "cat": "Courtesy" },
+  { "id": "c5", "hi": "कोई बात नहीं", "translit": "koī bāt nahīn", "en": "No problem", "cat": "Courtesy" },
+
+  { "id": "e1", "hi": "आप कैसे हैं?", "translit": "āp kaise hain?", "en": "How are you?", "cat": "Everyday" },
+  { "id": "e2", "hi": "मैं ठीक हूँ", "translit": "main thīk hūn", "en": "I am fine", "cat": "Everyday" },
+  { "id": "e3", "hi": "आपका नाम क्या है?", "translit": "āpkā nām kyā hai?", "en": "What is your name?", "cat": "Everyday" },
+  { "id": "e4", "hi": "मेरा नाम काय है", "translit": "merā nām Kay hai", "en": "My name is Kay", "cat": "Everyday" },
+  { "id": "e5", "hi": "मुझे समझ नहीं आया", "translit": "mujhe samajh nahīn āyā", "en": "I didn't understand", "cat": "Everyday" },
+  { "id": "e6", "hi": "हाँ", "translit": "hān", "en": "Yes", "cat": "Everyday" },
+  { "id": "e7", "hi": "नहीं", "translit": "nahīn", "en": "No", "cat": "Everyday" },
+  { "id": "e8", "hi": "ठीक है", "translit": "thīk hai", "en": "Okay / Alright", "cat": "Everyday" },
+
+  { "id": "q1", "hi": "यह क्या है?", "translit": "yah kyā hai?", "en": "What is this?", "cat": "Questions" },
+  { "id": "q2", "hi": "कितने का है?", "translit": "kitne kā hai?", "en": "How much is it?", "cat": "Questions" },
+  { "id": "q3", "hi": "शौचालय कहाँ है?", "translit": "shauchālay kahān hai?", "en": "Where is the toilet?", "cat": "Questions" },
+  { "id": "q4", "hi": "मुझे मदद चाहिए", "translit": "mujhe madad chāhiye", "en": "I need help", "cat": "Questions" },
+  { "id": "q5", "hi": "क्या आप अंग्रेज़ी बोलते हैं?", "translit": "kyā āp angrezī bolte hain?", "en": "Do you speak English?", "cat": "Questions" },
+  { "id": "q6", "hi": "मुझे हिंदी सीखनी है", "translit": "mujhe hindī sīkhnī hai", "en": "I want to learn Hindi", "cat": "Questions" },
+
+  { "id": "n1", "hi": "एक", "translit": "ek", "en": "One", "cat": "Numbers" },
+  { "id": "n2", "hi": "दो", "translit": "do", "en": "Two", "cat": "Numbers" },
+  { "id": "n3", "hi": "तीन", "translit": "tīn", "en": "Three", "cat": "Numbers" },
+  { "id": "n4", "hi": "चार", "translit": "chār", "en": "Four", "cat": "Numbers" },
+  { "id": "n5", "hi": "पाँच", "translit": "pānch", "en": "Five", "cat": "Numbers" }
+]

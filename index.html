@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#241712" />
+    <title>Chai with Kay</title>
+    <link rel="icon" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <div class="glass" aria-hidden="true">
+          <span class="glass__steam"></span>
+          <span class="glass__steam"></span>
+          <span class="glass__steam"></span>
+          <span class="glass__cup"></span>
+        </div>
+        <h1>Chai with <span>Kay</span></h1>
+      </div>
+      <div class="stats">
+        <span id="streak" title="Day streak">0🔥</span>
+        <span id="progress">0 learned</span>
+      </div>
+    </header>
+
+    <main class="card" id="card"></main>
+
+    <div class="skills">
+      <button class="skill skill--listen" id="listen">
+        <span class="ico">🔊</span> Listen
+      </button>
+      <button class="skill skill--listen" id="listen-slow">
+        <span class="ico">🐢</span> <span class="skill__slow">Slow</span>
+      </button>
+      <button class="skill skill--speak" id="speak">
+        <span class="ico">🎤</span> Speak
+      </button>
+    </div>
+
+    <p class="feedback" id="feedback" aria-live="polite"></p>
+
+    <nav class="controls">
+      <button class="nav" id="prev" aria-label="Previous">‹</button>
+      <span id="position">0 / 0</span>
+      <button class="pill" id="known">Got it ✓</button>
+      <button class="pill" id="shuffle">Shuffle</button>
+      <button class="nav" id="next" aria-label="Next">›</button>
+    </nav>
+
+    <div class="settings">
+      <label>
+        <input type="checkbox" id="toggle-translit" /> Show transliteration
+      </label>
+      <select id="filter" aria-label="Filter by category"></select>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
